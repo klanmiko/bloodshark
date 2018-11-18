@@ -34,6 +34,7 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
   }).then(() => {
     console.log('File downloaded locally to', tempFilePath);
 
+    console.log("Fuck")
     return new Promise((resolve, reject) => {
       let stream = fs.createReadStream(tempFilePath);
 
@@ -57,6 +58,7 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
       });
   
       parser.on('end', () => {
+        console.log("end loop")
         let promises = []
         for(let gameId of games) {
           game = plots.child(gameId)
