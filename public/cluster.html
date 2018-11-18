@@ -225,7 +225,8 @@
 <body onload="init()">
     <div id="sketchpadapp">
         <div class="leftside">
-             <input type="submit" value="Clear Sketchpad" id="clearbutton" onclick="clearCanvas(canvas,ctx);">
+            <button id="clearbutton" onclick="clearCanvas(canvas,ctx);">Reset Planets</button>
+            <button id="donebutton" onclick="submitData()">Done</button>
         </div>
         <div class="rightside">
             <canvas id="sketchpad">
