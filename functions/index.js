@@ -39,7 +39,7 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
       let record = parser.read();
       while(record) {
         if(record.length === 3) {
-          let gameId = record[2]
+          let gameId = record[2].replace("\r","")
           let game = plots.child(gameId)
           let coordinate = {
             x: parseFloat(record[0]),
@@ -53,6 +53,8 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
 
     parser.on('end', () => fs.unlinkSync(tempFilePath))
 
-    return stream.pipe(parser)
+    stream.pipe(parser)
+
+    return true
   });
 });
