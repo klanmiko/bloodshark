@@ -39,11 +39,11 @@
             // Draw a filled line
             ctx.beginPath();
 
-        // First, move to the old (previous) position
-        ctx.moveTo(lastX,lastY);
+            // First, move to the old (previous) position
+            ctx.moveTo(lastX,lastY);
 
-        // Now draw a line to the current touch/pointer position
-        ctx.lineTo(x,y);
+            // Now draw a line to the current touch/pointer position
+            ctx.lineTo(x,y);
 
             // Set the line thickness and draw the line
             ctx.lineWidth = size;
@@ -51,9 +51,9 @@
 
             ctx.closePath();
 
-        // Update the last position to reference the current position
-        lastX=x;
-        lastY=y;
+            // Update the last position to reference the current position
+            lastX=x;
+            lastY=y;
         } 
 
         // Clear the canvas context using the canvas width and height
@@ -92,14 +92,8 @@
             if (!e)
                 var e = event;
 
-            if (e.offsetX) {
-                mouseX = e.offsetX;
-                mouseY = e.offsetY;
-            }
-            else if (e.layerX) {
-                mouseX = e.layerX;
-                mouseY = e.layerY;
-            }
+           mouseX = e.clientX
+           mouseY = e.clientY
         }
 
         // Draw something when a touch start is detected
@@ -182,42 +176,7 @@
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
 
-    <style>
-    /* Some CSS styling */
-    #sketchpadapp {
-        /* Prevent nearby text being highlighted when accidentally dragging mouse outside confines of the canvas */
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
-    .leftside {
-    }
-    .rightside {
-        float:left;
-        margin-left:10px;
-    }
-    #sketchpad {
-        float:left;
-        height:300px;
-        width:400px;
-        border:2px solid #888;
-        border-radius:4px;
-        position:relative; /* Necessary for correct mouse co-ords in Firefox */
-        background-image: url(galaxy.jpg);
-        background-size: cover;
-    }
-    #clearbutton {
-        font-size: 15px;
-        padding: 10px;
-        -webkit-appearance: none;
-        background: #eee;
-        border: 1px solid #888;
-        cursor: pointer;
-    }
-    </style>
+    <link rel="stylesheet" href="/assets/css/cluster.css" />
 </head>
 
 <body onload="init()">
@@ -235,16 +194,10 @@
         var data = {};
 
         document.addEventListener('DOMContentLoaded', function() {
-            // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-            // // The Firebase SDK is initialized and available here!
-            //
-            // firebase.auth().onAuthStateChanged(user => { });
-            // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-            // firebase.messaging().requestPermission().then(() => { });
-            // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-            //
-            // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-    
+            let sketchpad = document.getElementById("sketchpad");
+            sketchpad.setAttribute("width", window.innerWidth)
+            sketchpad.setAttribute("height", window.innerHeight)
+
             try {
                 let app = firebase.app();
                 let database = app.database();
