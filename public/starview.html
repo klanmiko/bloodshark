@@ -110,13 +110,15 @@
     }
     </script>
     <script>
-        $(document).ready(function(){
-            $.getJSON( "test.json", function( data ) {
-              var items = [];
-              $.each( data, function( key, val ) {
-                items.push( "<li id='" + key + "'>" + val + "</li>" );
-              });
-            });
+        $(document).ready(function(){ 
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'color_planets.json', true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    var resp = JSON.parse(xhr.responseText);
+                }
+            }
+            xhr.send(null);
             $("#neptunep").css("border", "2px solid yellow");
             $("#saturnp").css("border", "2px solid yellow");
             $("#jupiterp").css("border", "3px solid yellow");
