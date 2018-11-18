@@ -148,7 +148,7 @@
 
             for(let key in data.points) {
                 let point = data.points[key]
-                if(ctx.isPointInPath((point.x - data.min.x) / (data.max.x - data.min.x) * canvas.width, (point.y - data.min.y) / (data.max.y- data.min.y) * canvas.height)) {
+                if(ctx.isPointInPath(((point.x - data.min.x) / (data.max.x - data.min.x) * canvas.width * 0.9) + (0.05 * canvas.width), ((point.y - data.min.y) / (data.max.y- data.min.y) * canvas.height * 0.9) + (0.05 * canvas.height))) {
                     let clusterPoint = {}
                     clusterPoint[key] = point
                     cluster.points.push(clusterPoint)
