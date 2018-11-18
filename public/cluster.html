@@ -250,7 +250,8 @@
                 let database = app.database();
                 let game0 = database.ref("plots/0")
                 game0.once('value').then(snapshot => {
-                    console.log(snapshot.val())
+                    data = snapshot.val()
+                    console.log(data)
                 });
             } catch (e) {
                 console.error(e);
