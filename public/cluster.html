@@ -16,6 +16,8 @@
         // We set it to -1 at the start to indicate that we don't have a good value for it yet
         var lastX,lastY=-1;
 
+        var number;
+
         
         function drawStarDust(ctx, x,y){
             var pointSize = 5; // Change according to the size of the point.
@@ -148,8 +150,6 @@
             if (!e)
                 var e = event;
 
-            console.log(rect.left)
-            console.log(rect.top)
            mouseX = e.clientX - 20
            mouseY = e.clientY - 20
         }
@@ -273,6 +273,21 @@
             } catch (e) {
                 console.error(e);
             }
+        }
+
+        function submitData() {
+            let app = firebase.app();
+            let database = app.database();
+            let clusterRef = database.ref("plots/"+number+"/clusters");
+            let promises = []
+            for(let cluster of clusters) {
+                let points = cluster.points.map(value => Object.values(value)[0])
+                promises.push(clusterRef.push().set({
+                    user: "john",
+                    points: points
+                }))
+            }
+            Promise.all(promises).then(() => window.location.href = "/starview.html");
         }
     </script>
 
