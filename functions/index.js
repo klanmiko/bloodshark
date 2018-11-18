@@ -25,6 +25,15 @@ var plots = db.ref("plots");
 // exports.helloWorld = functions.https.onRequest((request, response) => {
 //  response.send("Hello from Firebase!");
 // });
+
+exports.exportResearch = functions.https.onRequest((request, response) => {
+  var clusters = plots.child(request.param.plot).child("clusters")
+  clusters.once("value").then((snapshot) => {
+    var data = snapshot.val();
+    response.json(data);
+  })
+})
+
 exports.loadPlot = functions.storage.object().onFinalize((object) => {
   const bucket = storage.bucket(object.bucket);
   const tempFilePath = path.join(os.tmpdir(), object.name);
