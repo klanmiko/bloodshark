@@ -11,6 +11,12 @@
       display: inline-block;
       position: absolute;
     }
+        #logo{
+            text-align: center;
+            display:block;
+    margin:auto;
+            padding: 10px;
+        }
     </style>
     <script>
         $(document).ready(function(){ 
@@ -28,6 +34,8 @@
                         arr.push(span)
                         
                     }
+                    var logo = $('<img src="logo.svg" width = "100px" id="logo">')
+                    arr.push(logo)
                     $('body').html(arr);
                 }
             }
@@ -37,7 +45,7 @@
             
         });
     </script>
-</head>
+    </head>
 <body>
     
 </body>
