@@ -34,7 +34,6 @@
         
         function draw_clusters() {
             for(let cluster of clusters) {
-                console.log(cluster)
                 var pointSize = cluster.points.length; // Change according to the size of the point.
 
                 ctx.fillStyle = "red"; // Red color
@@ -89,11 +88,53 @@
             
         }
 
-        function animate_stardust(subset) {
-            console.log(subset)
-            clearCanvas(canvas, ctx)
-        }
+        function animate_stardust(cluster) {
+            console.log(cluster)
 
+            var state = "collapse"
+            var time = Date.now()
+            var flashSize = 0
+
+            var myAnimation = setInterval(() => {
+                var delta = Date.now() - time
+                clearCanvas(canvas, ctx)
+                switch(state) {
+                    case "collapse":
+                        for(let point of cluster.points) {
+                            let pData = point[Object.keys(point)[0]]
+                            ctx.fillStyle = "white"
+                            var pointSize = 3
+
+                            averageConstant = Math.min(delta * 0.001, 0.5)
+
+                            weightedAverage = {}
+                            weightedAverage.x = (1 - averageConstant) * pData.x + averageConstant * cluster.average.x
+
+                            weightedAverage.y = (1 - averageConstant) *pData.y + averageConstant * cluster.average.y
+
+                            ctx.beginPath(); //Start path
+                            ctx.arc((weightedAverage.x - data.min.x) / (data.max.x - data.min.x) * canvas.width, (weightedAverage.y - data.min.y) / (data.max.y- data.min.y) * canvas.height, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
+                            ctx.fill(); // Close the path and fill.                            
+                        }
+                        if(delta > 1000) state = "flash"
+                        break;
+                    case "flash":
+                        ctx.fillStyle = "rgb("+Math.min(255, (delta - 1000))+", 0, 0)"; // Red color
+                        var pointSize = 0.002*delta + 3
+
+                        ctx.beginPath(); //Start path
+                        ctx.arc((cluster.average.x - data.min.x) / (data.max.x - data.min.x) * canvas.width, (cluster.average.y - data.min.y) / (data.max.y- data.min.y) * canvas.height, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
+                        ctx.fill(); // Close the path and fill.
+
+                }
+            }, 20);
+
+            setTimeout(() => {
+                clearInterval(myAnimation)
+                clusters.push(cluster) // gucci push by reference
+                clearCanvas(canvas, ctx)
+            }, 3000)
+        }
         // Keep track of the mouse button being released
         function sketchpad_mouseUp() {
             mouseDown=0;
@@ -102,7 +143,6 @@
             ctx.stroke()
 
             let cluster = {points: []}
-            clusters.push(cluster) // gucci push by reference
 
             for(let key in data.points) {
                 let point = data.points[key]
@@ -217,7 +257,6 @@
             for(let cluster of clusters) {
                 for(let point of cluster.points) {
                     let key = Object.keys(point)[0]
-                    console.log(point)
                     data.points[key] = point[key] 
                 }
                 cluster.points.length = 0
@@ -278,8 +317,6 @@
                     data.min = min
                     data.max = max
                     data.points = pointsData
-
-                    console.log(data)
 
                     create_points()
                 });
