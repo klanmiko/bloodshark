@@ -7,6 +7,7 @@ const os = require('os')
 const path = require('path')
 const fs = require('fs')
 const parse = require('csv-parse')
+var Promise = require('promise')
 
 var parser = parse()
 
@@ -33,48 +34,55 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
   }).then(() => {
     console.log('File downloaded locally to', tempFilePath);
 
-    let stream = fs.createReadStream(tempFilePath);
+    return new Promise((resolve, reject) => {
+      let stream = fs.createReadStream(tempFilePath);
 
-    var games = []
-
-    parser.on('readable', () => {
-      let record = parser.read();
-      while(record) {
-        if(record.length === 3) {
-          let gameId = record[2].replace(/\r|\n/g,"")
-          if(!games.includes(gameId)) games.push(gameId)
-          let game = plots.child(gameId)
-          let coordinate = {
-            x: parseFloat(record[0]),
-            y: parseFloat(record[1])
+      var games = []
+  
+      parser.on('readable', () => {
+        let record = parser.read();
+        while(record) {
+          if(record.length === 3) {
+            let gameId = record[2].replace(/\r|\n/g,"")
+            if(!games.includes(gameId)) games.push(gameId)
+            let game = plots.child(gameId)
+            let coordinate = {
+              x: parseFloat(record[0]),
+              y: parseFloat(record[1])
+            }
+            game.push().set(coordinate)
           }
-          game.push().set(coordinate)
+          record = parser.read()
         }
-        record = parser.read()
-      }
-    });
+      });
+  
+      parser.on('end', () => {
+        for(let gameId of games) {
+          game = plots.child(gameId)
+          game.once("value").then((support) => {
+            let data = support.val()
+            let points = []
 
-    parser.on('end', () => {
-      for(let game of games) {
-        let game = plots.child(game)
-        game.once("value").then((support) => {
-          let data = support.val()
-          let points = Object.values(data)
-          let max = {}
-          let min = {}
-          max.x = points.reduce((a, b) => Math.max(a.x,b.x))
-          max.y = points.reduce((a, b) => Math.max(a.y,b.y))
-          min.x = points.reduce((a, b) => Math.min(a.x,b.x))
-          min.y = points.reduce((a, b) => Math.min(a.y,b.y))
+            for(let key in data) {
+              points.push(data[key])
+            }
 
-          game.set({min: min, max: max})
-        })
-      }
-      fs.unlink(tempFilePath)
-    });
+            let max = {}
+            let min = {}
+            max.x = points.reduce((a, b) => Math.max(a.x,b.x))
+            max.y = points.reduce((a, b) => Math.max(a.y,b.y))
+            min.x = points.reduce((a, b) => Math.min(a.x,b.x))
+            min.y = points.reduce((a, b) => Math.min(a.y,b.y))
+  
+            game.set({min: min, max: max})
 
-    stream.pipe(parser)
-
-    return true
+            resolve(true)
+          })
+        }
+        fs.unlinkSync(tempFilePath)
+      });
+  
+      stream.pipe(parser)
+    })
   });
 });
