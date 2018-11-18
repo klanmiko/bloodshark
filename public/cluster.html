@@ -272,8 +272,9 @@
         function init() {
             // Get the specific canvas element from the HTML document
             canvas = document.getElementById('sketchpad');
-            canvas.setAttribute("width", window.innerWidth - 20)
-            canvas.setAttribute("height", window.innerHeight - 20)
+            canvas.setAttribute("width", window.innerWidth);
+            canvas.setAttribute("height", window.innerHeight);
+            canvas.setAttribute("position", "fixed")
 
 
             // If the browser supports the canvas tag, get the 2d drawing context for this canvas

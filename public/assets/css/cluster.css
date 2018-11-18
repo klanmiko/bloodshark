@@ -16,7 +16,6 @@ body {
   width:100%;
   background-image: url("/galaxy.jpg");
   background-size: cover;
-  padding: 20px
 }
 #clearbutton {
   font-size: 15px;
