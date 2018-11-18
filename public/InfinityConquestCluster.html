@@ -186,12 +186,6 @@
     user-select: none;
 }
 .leftside {
-    float:left;
-    width:220px;
-    height:285px;
-    background-color:#def;
-    padding:10px;
-    border-radius:4px;
 }
 .rightside {
     float:left;
@@ -204,6 +198,8 @@
     border:2px solid #888;
     border-radius:4px;
     position:relative; /* Necessary for correct mouse co-ords in Firefox */
+    background-image: url(galaxy.jpg);
+    background-size: cover;
 }
 #clearbutton {
     font-size: 15px;
@@ -218,9 +214,6 @@
 <body onload="init()">
     <div id="sketchpadapp">
         <div class="leftside">
-             Touchscreen and mouse support HTML5 canvas sketchpad.<br/><br/>
-             Draw something by tapping or dragging.<br/><br/>
-             Works on iOS, Android and desktop/laptop touchscreens using Chrome/Firefox/Safari.<br/><br/>
              <input type="submit" value="Clear Sketchpad" id="clearbutton" onclick="clearCanvas(canvas,ctx);">
         </div>
         <div class="rightside">
