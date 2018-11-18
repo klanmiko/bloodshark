@@ -29,7 +29,7 @@ app.use(cors({ origin: true }));
 
 // build multiple CRUD interfaces:
 app.get('/export/:plot', (request, response) => {
-  var clusters = plots.child(request.param.plot).child("clusters")
+  var clusters = plots.child(request.params.plot).child("clusters")
   clusters.once("value").then((snapshot) => {
     var data = snapshot.val();
     response.json(data);
