@@ -2,6 +2,13 @@
     <head>
     <link rel="stylesheet" href="starview.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/5.5.8/firebase-app.js"></script>
+    <script defer src="/__/firebase/5.5.8/firebase-database.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/5.5.8/firebase-auth.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
     </head>  
 <body class="opening hide-UI view-2D zoom-large data-close controls-close">
     <div id="navbar">
@@ -110,26 +117,29 @@
     </script>
     <script>
         $(document).ready(function(){ 
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'color_planets.json', true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4) {
-                    var resp = JSON.parse(xhr.responseText);
-                    $("#jupiterp").css("border-color", resp.jupiter.color);
-                    $("#saturnp").css("border-color", resp.saturn.color);
-                    $("#sun").css("border-color", resp.sun.color);
-                    $("#earthp").css("border-color", resp.earth.color);
-                    $("#uranusp").css("border-color", resp.uranus.color);
-                    $("#neptunep").css("border-color", resp.neptune.color);
-                }
-            }
-            xhr.send(null);
-            $("#neptunep").css("border", "2px solid");
-            $("#saturnp").css("border", "2px solid");
-            $("#jupiterp").css("border", "3px solid");
-            $("#uranusp").css("border", "2px solid");
-            $("#earthp").css("border", "2px solid");
-            $("#sun").css("border", "4px solid");
+          try{
+                let app = firebase.app();
+                let database = app.database();
+                database.ref("systems/milky").on("value", snapshot => {
+                  let resp = snapshot.val()
+                  $("#jupiterp").css("border-color", resp.jupiter.color);
+                  $("#saturnp").css("border-color", resp.saturn.color);
+                  $("#sun").css("border-color", resp.sun.color);
+                  $("#earthp").css("border-color", resp.earth.color);
+                  $("#uranusp").css("border-color", resp.uranus.color);
+                  $("#neptunep").css("border-color", resp.neptune.color);
+                })
+          }
+          catch(e) {
+            console.error(e)
+          }
+
+          $("#neptunep").css("border", "2px solid");
+          $("#saturnp").css("border", "2px solid");
+          $("#jupiterp").css("border", "3px solid");
+          $("#uranusp").css("border", "2px solid");
+          $("#earthp").css("border", "2px solid");
+          $("#sun").css("border", "4px solid");
         });
     </script>
     <script src="js/prefixfree.min.js"></script>
