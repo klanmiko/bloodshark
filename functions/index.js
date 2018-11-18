@@ -38,14 +38,15 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
     parser.on('readable', () => {
       let record = parser.read();
       while(record) {
-        console.log(record)
-        let gameId = record[2]
-        let game = plots.child(gameId)
-        let coordinate = {
-          x: record[0],
-          y: record[1]
+        if(record.length === 3) {
+          let gameId = record[2]
+          let game = plots.child(gameId)
+          let coordinate = {
+            x: record[0],
+            y: record[1]
+          }
+          game.push().set(coordinate)
         }
-        game.push().set(coordinate)
         record = parser.read()
       }
     });
