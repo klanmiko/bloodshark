@@ -1,5 +1,6 @@
 <html>
 <head>
+    <link rel="stylesheet" href="cluster.css">
 <title>Sketchpad</title>
     <script type="text/javascript">
         // Variables for referencing the canvas and 2dcanvas context
@@ -28,25 +29,29 @@
         
         var data = {}
         
-        document.addEventListener('DOMContentLoaded', function() {
-           try{
-               let app = firebase.app();
-               let database = app.database();
-               let game0 = database.ref("plots/0");
-               game0.once('value').then(snapshot => {
-                   data = snapshot.val()
-                   //console.log(data)
-                   for (i = 0; i < 100; i++){
-                       x_dot = Object.values(data)[i].x * canvas.width;
-                       y_dot = Object.values(data)[i].y * canvas.height;
-                       drawStarDust(ctx, x_dot,y_dot);
-                   }
-               });
-               
-           } catch (e) {
-               console.error(e);
-           }
-        });
+        function create_points(){
+            document.addEventListener('DOMContentLoaded', function() {
+               try{
+                   let app = firebase.app();
+                   let database = app.database();
+                   let game0 = database.ref("plots/0");
+                   game0.once('value').then(snapshot => {
+                       data = snapshot.val()
+                       //console.log(data)
+                       for (i = 0; i < 100; i++){
+                           x_dot = Object.values(data)[i].x * canvas.width;
+                           y_dot = Object.values(data)[i].y * canvas.height;
+                           drawStarDust(ctx, x_dot,y_dot);
+                       }
+                   });
+
+               } catch (e) {
+                   console.error(e);
+               }
+            });
+        }
+        
+        create_points();
         
         // Draws a line between the specified position on the supplied canvas name
         // Parameters are: A canvas context, the x position, the y position, the size of the dot
@@ -89,6 +94,7 @@
         // Clear the canvas context using the canvas width and height
         function clearCanvas(canvas,ctx) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            create_points();
         }
 
         // Keep track of the mouse button being pressed and draw a dot at current location
@@ -234,10 +240,8 @@
         height:300px;
         width:400px;
         border:2px solid #888;
-        border-radius:4px;
         position:relative; /* Necessary for correct mouse co-ords in Firefox */
-        background-image: url(galaxy.jpg);
-        background-size: cover;
+        background: transparent;
     }
     #clearbutton {
         font-size: 15px;
