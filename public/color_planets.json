@@ -1,0 +1,20 @@
+{
+  "jupiter":{
+    "color": "red"
+  },
+  "uranus":{
+    "color": "red"
+  },
+  "earth":{
+    "color": "#82b92c"
+  },
+  "saturn":{
+    "color": "#82b92c"
+  },
+  "neptune":{
+    "color": "#1976D2"
+  },
+  "sun":{
+    "color": "white"
+  }
+}
