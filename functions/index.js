@@ -42,8 +42,8 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
           let gameId = record[2]
           let game = plots.child(gameId)
           let coordinate = {
-            x: record[0],
-            y: record[1]
+            x: parseFloat(record[0]),
+            y: parseFloat(record[1])
           }
           game.push().set(coordinate)
         }
