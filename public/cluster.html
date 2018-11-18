@@ -47,7 +47,9 @@
         function create_points() {
             for (let point of Object.values(data.points)){
                 x_dot = (point.x - data.min.x) / (data.max.x - data.min.x) * canvas.width
+                x_dot = (0.9 * x_dot) + (0.05 * canvas.width);
                 y_dot = (point.y - data.min.y) / (data.max.y- data.min.y) * canvas.height
+                y_dot = (0.9 * y_dot) + (0.05 * canvas.height)
                 drawStarDust(ctx, x_dot,y_dot);
             }
         }
