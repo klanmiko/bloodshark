@@ -46,7 +46,7 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
           if(record.length === 3) {
             let gameId = record[2].replace(/\r|\n/g,"")
             if(!games.includes(gameId)) games.push(gameId)
-            let game = plots.child(gameId)
+            let game = plots.child(gameId).child("points")
             let coordinate = {
               x: parseFloat(record[0]),
               y: parseFloat(record[1])
@@ -66,7 +66,7 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
             let data = support.val()
             let points = []
 
-            for(let key in data) {
+            for(let key in data.points) {
               points.push(data[key])
             }
 
