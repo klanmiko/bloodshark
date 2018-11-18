@@ -76,6 +76,7 @@
 
         function animate_stardust(subset) {
             console.log(subset)
+            clearCanvas(canvas, ctx)
         }
 
         // Keep track of the mouse button being released
@@ -94,7 +95,10 @@
                 }
             }
 
-            animate_stardust(subset)
+
+            setTimeout(() => {
+                animate_stardust(subset)
+            }, 100)
 
 
         }
