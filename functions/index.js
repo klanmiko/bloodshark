@@ -69,10 +69,12 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
 
             let max = {}
             let min = {}
-            max.x = points.reduce((a, b) => Math.max(a.x,b.x))
-            max.y = points.reduce((a, b) => Math.max(a.y,b.y))
-            min.x = points.reduce((a, b) => Math.min(a.x,b.x))
-            min.y = points.reduce((a, b) => Math.min(a.y,b.y))
+            let XS = points.map(value => value.x)
+            let YS = points.map(value => value.y)
+            max.x = XS.reduce((a, b) => Math.max(a,b))
+            max.y = YS.reduce((a, b) => Math.max(a,b))
+            min.x = XS.reduce((a, b) => Math.min(a,b))
+            min.y = YS.reduce((a, b) => Math.min(a,b))
   
             game.set({min: min, max: max})
 
