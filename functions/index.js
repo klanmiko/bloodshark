@@ -57,9 +57,10 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
       });
   
       parser.on('end', () => {
+        let promises = []
         for(let gameId of games) {
           game = plots.child(gameId)
-          game.once("value").then((support) => {
+          promises.push(game.once("value").then((support) => {
             let data = support.val()
             let points = []
 
@@ -76,12 +77,14 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
             min.x = XS.reduce((a, b) => Math.min(a,b))
             min.y = YS.reduce((a, b) => Math.min(a,b))
   
-            game.set({min: min, max: max})
+            console.log(min)
+            console.log(max)
 
-          })
+            return game.set({min: min, max: max})
+          }))
         }
         fs.unlinkSync(tempFilePath)
-        resolve(true)
+        return new Promise.all(promises).then(() => resolve(true));
       });
   
       stream.pipe(parser)
