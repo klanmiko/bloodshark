@@ -58,11 +58,8 @@
             lastY=y;
             }
 
-            // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
-            r=0; g=0; b=0; a=255;
-
             // Select a fill style
-            ctx.strokeStyle = "rgba("+r+","+g+","+b+","+(a/255)+")";
+            ctx.strokeStyle = "#1976D2";
 
             // Set the line "cap" style to round, so lines at different angles can join into each other
             ctx.lineCap = "round";
@@ -97,7 +94,7 @@
         // Keep track of the mouse button being pressed and draw a dot at current location
         function sketchpad_mouseDown() {
             mouseDown=1;
-            drawLine(ctx,mouseX,mouseY,12);
+            drawLine(ctx,mouseX,mouseY,5);
         }
 
         // Keep track of the mouse button being released
@@ -116,7 +113,7 @@
 
             // Draw a dot if the mouse button is currently being pressed
             if (mouseDown==1) {
-                drawLine(ctx,mouseX,mouseY,12);
+                drawLine(ctx,mouseX,mouseY,5);
             }
         }
 
