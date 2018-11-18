@@ -28,7 +28,21 @@
         }
         
         var data = {}
+        var clusters = []
         
+        function draw_clusters() {
+            for(let cluster of clusters) {
+                console.log(cluster)
+                var pointSize = cluster.points.length; // Change according to the size of the point.
+
+                ctx.fillStyle = "red"; // Red color
+
+                ctx.beginPath(); //Start path
+                ctx.arc(cluster.average.x * canvas.width, cluster.average.y * canvas.height, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
+                ctx.fill(); // Close the path and fill.
+            }
+        }
+
         function create_points() {
             for (let point of Object.values(data)){
                 x_dot = point.x * canvas.width;
@@ -62,6 +76,7 @@
         function clearCanvas(canvas,ctx) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             create_points();
+            draw_clusters();
         }
 
         // Keep track of the mouse button being pressed and draw a dot at current location
@@ -86,18 +101,34 @@
             ctx.closePath()
             ctx.stroke()
 
-            let subset = []
+            let cluster = {points: []}
+            clusters.push(cluster) // gucci push by reference
 
             for(let key in data) {
                 let point = data[key]
                 if(ctx.isPointInPath(point.x * canvas.width, point.y * canvas.height)) {
-                    subset.push({key: point})
+                    let clusterPoint = {}
+                    clusterPoint[key] = point
+                    cluster.points.push(clusterPoint)
+                    delete data[key]
                 }
             }
 
+            let average = {x: 0, y: 0}
+
+            for(let pointObject of cluster.points) {
+                let point = Object.values(pointObject)[0]
+                average.x += point.x
+                average.y += point.y
+            }
+
+            average.x /= cluster.points.length
+            average.y /= cluster.points.length
+
+            cluster.average = average
 
             setTimeout(() => {
-                animate_stardust(subset)
+                animate_stardust(cluster)
             }, 100)
 
 
