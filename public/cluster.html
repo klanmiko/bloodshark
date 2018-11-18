@@ -29,10 +29,8 @@
         
         var data = {}
         
-        function create_points(){
-            let points = Object.values(data)
-            for (let i = 0; i < Math.min(points.length, 100); i++){
-                let point = points[i]
+        function create_points() {
+            for (let point of Object.values(data)){
                 x_dot = point.x * canvas.width;
                 y_dot = point.y * canvas.height;
                 drawStarDust(ctx, x_dot,y_dot);
@@ -45,12 +43,6 @@
         // Parameters are: A canvas context, the x position, the y position, the size of the dot
         function drawLine(ctx,x,y,size) {
 
-            // If lastX is not set, set lastX and lastY to the current position 
-            if (lastX==-1) {
-                lastX=x;
-            lastY=y;
-            }
-
             // Select a fill style
             ctx.strokeStyle = "#1976D2";
 
@@ -58,25 +50,12 @@
             ctx.lineCap = "round";
             //ctx.lineJoin = "round";
 
-
-            // Draw a filled line
-            ctx.beginPath();
-
-            // First, move to the old (previous) position
-            ctx.moveTo(lastX,lastY);
-
             // Now draw a line to the current touch/pointer position
             ctx.lineTo(x,y);
 
             // Set the line thickness and draw the line
             ctx.lineWidth = size;
             ctx.stroke();
-
-            ctx.closePath();
-
-            // Update the last position to reference the current position
-            lastX=x;
-            lastY=y;
         } 
 
         // Clear the canvas context using the canvas width and height
@@ -88,16 +67,36 @@
         // Keep track of the mouse button being pressed and draw a dot at current location
         function sketchpad_mouseDown() {
             mouseDown=1;
-            drawLine(ctx,mouseX,mouseY,5);
+            ctx.beginPath();
+            
+            // First, move to the old (previous) position
+            ctx.moveTo(mouseX,mouseY);
+            
+        }
+
+        function animate_stardust(subset) {
+            console.log(subset)
         }
 
         // Keep track of the mouse button being released
         function sketchpad_mouseUp() {
             mouseDown=0;
 
-            // Reset lastX and lastY to -1 to indicate that they are now invalid, since we have lifted the "pen"
-            lastX=-1;
-            lastY=-1;
+            ctx.closePath()
+            ctx.stroke()
+
+            let subset = []
+
+            for(let key in data) {
+                let point = data[key]
+                if(ctx.isPointInPath(point.x * canvas.width, point.y * canvas.height)) {
+                    subset.push({key: point})
+                }
+            }
+
+            animate_stardust(subset)
+
+
         }
 
         // Keep track of the mouse position and draw a dot if mouse button is currently pressed
@@ -194,10 +193,10 @@
             try{
                 let app = firebase.app();
                 let database = app.database();
-                let game0 = database.ref("plots/0");
+                let game0 = database.ref("plots/0").limitToFirst(100);
                 game0.once('value').then(snapshot => {
                     data = snapshot.val()
-                    
+                    console.log(data)
                     create_points()
                 });
 
