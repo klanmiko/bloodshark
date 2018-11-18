@@ -6,6 +6,9 @@ const admin = require('firebase-admin')
 const os = require('os')
 const path = require('path')
 const fs = require('fs')
+const parse = require('csv-parse')
+
+var parser = parse()
 
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
@@ -33,8 +36,9 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
     let stream = fs.createReadStream(tempFilePath);
 
     parser.on('readable', () => {
-      let record;
-      while(record = parser.read()) {
+      let record = parser.read();
+      while(record) {
+        console.log(record)
         let gameId = record[2]
         let game = plots.child(gameId)
         let coordinate = {
@@ -42,6 +46,7 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
           y: record[1]
         }
         game.push().set(coordinate)
+        record = parser.read()
       }
     });
 
