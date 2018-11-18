@@ -36,10 +36,16 @@
             for(let cluster of clusters) {
                 var pointSize = cluster.points.length; // Change according to the size of the point.
 
+                let x_dot = (cluster.average.x - data.min.x) / (data.max.x - data.min.x) * canvas.width
+                x_dot = (0.9 * x_dot) + (0.05 * canvas.width)
+
+                let y_dot = (cluster.average.y - data.min.y) / (data.max.y- data.min.y) * canvas.height
+                y_dot = (0.9 * y_dot) + (0.05 * canvas.height)
+
                 ctx.fillStyle = "red"; // Red color
 
                 ctx.beginPath(); //Start path
-                ctx.arc((cluster.average.x - data.min.x) / (data.max.x - data.min.x) * canvas.width, (cluster.average.y - data.min.y) / (data.max.y- data.min.y) * canvas.height, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
+                ctx.arc(x_dot, y_dot, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
                 ctx.fill(); // Close the path and fill.
             }
         }
@@ -114,8 +120,14 @@
 
                             weightedAverage.y = (1 - averageConstant) *pData.y + averageConstant * cluster.average.y
 
+                            let x_dot = (weightedAverage.x - data.min.x) / (data.max.x - data.min.x) * canvas.width
+                            x_dot = (0.9 * x_dot) + (0.05 * canvas.width)
+
+                            let y_dot = (weightedAverage.y - data.min.y) / (data.max.y- data.min.y) * canvas.height
+                            y_dot = (0.9 * y_dot) + (0.05 * canvas.height)
+
                             ctx.beginPath(); //Start path
-                            ctx.arc((weightedAverage.x - data.min.x) / (data.max.x - data.min.x) * canvas.width, (weightedAverage.y - data.min.y) / (data.max.y- data.min.y) * canvas.height, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
+                            ctx.arc(x_dot, y_dot, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
                             ctx.fill(); // Close the path and fill.                            
                         }
                         if(delta > 1000) state = "flash"
@@ -124,8 +136,14 @@
                         ctx.fillStyle = "rgb("+Math.min(255, (delta - 1000))+", 0, 0)"; // Red color
                         var pointSize = 0.002*delta + 3
 
+                        let x_dot = (cluster.average.x - data.min.x) / (data.max.x - data.min.x) * canvas.width
+                        x_dot = (0.9 * x_dot) + (0.05 * canvas.width)
+
+                        let y_dot = (cluster.average.y - data.min.y) / (data.max.y- data.min.y) * canvas.height
+                        y_dot = (0.9 * y_dot) + (0.05 * canvas.height)
+
                         ctx.beginPath(); //Start path
-                        ctx.arc((cluster.average.x - data.min.x) / (data.max.x - data.min.x) * canvas.width, (cluster.average.y - data.min.y) / (data.max.y- data.min.y) * canvas.height, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
+                        ctx.arc(x_dot, y_dot, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
                         ctx.fill(); // Close the path and fill.
 
                 }
