@@ -198,6 +198,18 @@
             }
         }
 
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == variable) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+            console.log('Query variable %s not found', variable);
+            return null;
+        }
 
         // Set-up the canvas and add our event handlers after the page has loaded
         function init() {
@@ -226,7 +238,8 @@
             try{
                 let app = firebase.app();
                 let database = app.database();
-                let game0 = database.ref("plots/0/points").limitToFirst(100);
+                number = getQueryVariable("plot") || 0
+                let game0 = database.ref("plots/"+number+"/points").limitToFirst(100);
                 game0.once('value').then(snapshot => {
                     let pointsData = snapshot.val()
                     
