@@ -50,9 +50,7 @@
                 drawStarDust(ctx, x_dot,y_dot);
             }
         }
-        
-        create_points();
-        
+                
         // Draws a line between the specified position on the supplied canvas name
         // Parameters are: A canvas context, the x position, the y position, the size of the dot
         function drawLine(ctx,x,y,size) {
@@ -104,13 +102,13 @@
             let cluster = {points: []}
             clusters.push(cluster) // gucci push by reference
 
-            for(let key in data) {
-                let point = data[key]
+            for(let key in data.points) {
+                let point = data.points[key]
                 if(ctx.isPointInPath((point.x - data.min.x) / (data.max.x - data.min.x) * canvas.width, (point.y - data.min.y) / (data.max.y- data.min.y) * canvas.height)) {
                     let clusterPoint = {}
                     clusterPoint[key] = point
                     cluster.points.push(clusterPoint)
-                    delete data[key]
+                    delete data.points[key]
                 }
             }
 
@@ -228,16 +226,20 @@
             try{
                 let app = firebase.app();
                 let database = app.database();
-                let game0 = database.ref("plots/0").limitToFirst(100);
+                let game0 = database.ref("plots/0/points").limitToFirst(100);
                 game0.once('value').then(snapshot => {
-                    data = snapshot.val()
-                    console.log(data)
-                    game = plots.child(gameId)
+                    let pointsData = snapshot.val()
+                    
+                    let points = []
+
+                    for(let key in pointsData) {
+                        points.push(pointsData[key])
+                    }
 
                     let max = {}
                     let min = {}
-                    let XS = data.points.map(value => value.x)
-                    let YS = data.points.map(value => value.y)
+                    let XS = points.map(value => value.x)
+                    let YS = points.map(value => value.y)
                     max.x = XS.reduce((a, b) => Math.max(a,b))
                     max.y = YS.reduce((a, b) => Math.max(a,b))
                     min.x = XS.reduce((a, b) => Math.min(a,b))
@@ -245,6 +247,9 @@
         
                     data.min = min
                     data.max = max
+                    data.points = pointsData
+
+                    console.log(data)
 
                     create_points()
                 });
