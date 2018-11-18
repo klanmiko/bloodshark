@@ -27,9 +27,6 @@ const app = express();
 // Automatically allow cross-origin requests
 app.use(cors({ origin: true }));
 
-// Add middleware to authenticate requests
-app.use(myMiddleware);
-
 // build multiple CRUD interfaces:
 app.get('/export/:plot', (request, response) => {
   var clusters = plots.child(request.param.plot).child("clusters")
