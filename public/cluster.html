@@ -18,7 +18,7 @@
 
         
         function drawStarDust(ctx, x,y){
-            var pointSize = 3; // Change according to the size of the point.
+            var pointSize = 5; // Change according to the size of the point.
 
             ctx.fillStyle = "white"; // Red color
 
@@ -30,25 +30,12 @@
         var data = {}
         
         function create_points(){
-            document.addEventListener('DOMContentLoaded', function() {
-               try{
-                   let app = firebase.app();
-                   let database = app.database();
-                   let game0 = database.ref("plots/0");
-                   game0.once('value').then(snapshot => {
-                       data = snapshot.val()
-                       //console.log(data)
-                       for (i = 0; i < 100; i++){
-                           x_dot = Object.values(data)[i].x * canvas.width;
-                           y_dot = Object.values(data)[i].y * canvas.height;
-                           drawStarDust(ctx, x_dot,y_dot);
-                       }
-                   });
-
-               } catch (e) {
-                   console.error(e);
-               }
-            });
+            let points = Object.values(data)
+            for (let point of points){
+                x_dot = point.x * canvas.width;
+                y_dot = point.y * canvas.height;
+                drawStarDust(ctx, x_dot,y_dot);
+            }
         }
         
         create_points();
@@ -183,6 +170,8 @@
         function init() {
             // Get the specific canvas element from the HTML document
             canvas = document.getElementById('sketchpad');
+            canvas.setAttribute("width", window.innerWidth)
+            canvas.setAttribute("height", window.innerHeight)
 
             // If the browser supports the canvas tag, get the 2d drawing context for this canvas
             if (canvas.getContext)
@@ -199,6 +188,20 @@
                 canvas.addEventListener('touchstart', sketchpad_touchStart, false);
                 canvas.addEventListener('touchend', sketchpad_touchEnd, false);
                 canvas.addEventListener('touchmove', sketchpad_touchMove, false);
+            }
+
+            try{
+                let app = firebase.app();
+                let database = app.database();
+                let game0 = database.ref("plots/0");
+                game0.once('value').then(snapshot => {
+                    data = snapshot.val()
+                    //console.log(data)
+                    
+                });
+
+            } catch (e) {
+                console.error(e);
             }
         }
     </script>
@@ -221,31 +224,9 @@
              <input type="submit" value="Clear Sketchpad" id="clearbutton" onclick="clearCanvas(canvas,ctx);">
         </div>
         <div class="rightside">
-            <canvas id="sketchpad" height="300" width="400">
+            <canvas id="sketchpad">
             </canvas>
         </div>
     </div>
-
-    <script>
-        var data = {};
-
-        document.addEventListener('DOMContentLoaded', function() {
-            let sketchpad = document.getElementById("sketchpad");
-            sketchpad.setAttribute("width", window.innerWidth)
-            sketchpad.setAttribute("height", window.innerHeight)
-
-            try {
-                let app = firebase.app();
-                let database = app.database();
-                let game0 = database.ref("plots/0")
-                game0.once('value').then(snapshot => {
-                    data = snapshot.val()
-                    console.log(data)
-                });
-            } catch (e) {
-                console.error(e);
-            }
-        });
-    </script>
 </body>
 </html>
