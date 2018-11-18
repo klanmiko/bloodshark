@@ -19,20 +19,29 @@ admin.initializeApp({
 var db = admin.database()
 var plots = db.ref("plots");
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+const express = require('express');
+const cors = require('cors');
 
-exports.exportResearch = functions.https.onRequest((request, response) => {
+const app = express();
+
+// Automatically allow cross-origin requests
+app.use(cors({ origin: true }));
+
+// Add middleware to authenticate requests
+app.use(myMiddleware);
+
+// build multiple CRUD interfaces:
+app.get('/export/:plot', (request, response) => {
   var clusters = plots.child(request.param.plot).child("clusters")
   clusters.once("value").then((snapshot) => {
     var data = snapshot.val();
     response.json(data);
   })
-})
+});
+
+// Expose Express API as a single Cloud Function:
+exports.exportResearch = functions.https.onRequest(app);
+
 
 exports.loadPlot = functions.storage.object().onFinalize((object) => {
   const bucket = storage.bucket(object.bucket);
