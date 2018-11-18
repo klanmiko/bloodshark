@@ -24,7 +24,7 @@
                         x = resp[key]["x"] * (window.innerWidth)/ 100;
                         y = resp[key]["y"] * (window.innerHeight)/100;
                         color = resp[key]["color"];
-                        var span = $('<span />').addClass('dot').css("top",y).css("left",x).css("background-color",color);
+                        var span = $('<a />').addClass('dot').css("top",y).css("left",x).css("background-color",color).css("data-url","starview.html").attr("href","starview.html")
                         arr.push(span)
                         
                     }
@@ -32,6 +32,8 @@
                 }
             }
             xhr.send(null);
+            
+            document.getElementsByClassName("dot").href = "starview.html"
             
         });
     </script>
