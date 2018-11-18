@@ -78,10 +78,10 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
   
             game.set({min: min, max: max})
 
-            resolve(true)
           })
         }
         fs.unlinkSync(tempFilePath)
+        resolve(true)
       });
   
       stream.pipe(parser)
