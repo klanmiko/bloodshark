@@ -35,11 +35,14 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
 
     let stream = fs.createReadStream(tempFilePath);
 
+    var games = []
+
     parser.on('readable', () => {
       let record = parser.read();
       while(record) {
         if(record.length === 3) {
-          let gameId = record[2].replace("\r","")
+          let gameId = record[2].replace(/\r|\n/g,"")
+          if(!games.includes(gameId)) games.push(gameId)
           let game = plots.child(gameId)
           let coordinate = {
             x: parseFloat(record[0]),
@@ -51,7 +54,24 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
       }
     });
 
-    parser.on('end', () => fs.unlinkSync(tempFilePath))
+    parser.on('end', () => {
+      for(let game of games) {
+        let game = plots.child(game)
+        game.once("value").then((support) => {
+          let data = support.val()
+          let points = Object.values(data)
+          let max = {}
+          let min = {}
+          max.x = points.reduce((a, b) => Math.max(a.x,b.x))
+          max.y = points.reduce((a, b) => Math.max(a.y,b.y))
+          min.x = points.reduce((a, b) => Math.min(a.x,b.x))
+          min.y = points.reduce((a, b) => Math.min(a.y,b.y))
+
+          game.set({min: min, max: max})
+        })
+      }
+      fs.unlink(tempFilePath)
+    });
 
     stream.pipe(parser)
 

@@ -38,15 +38,15 @@
                 ctx.fillStyle = "red"; // Red color
 
                 ctx.beginPath(); //Start path
-                ctx.arc(cluster.average.x * canvas.width, cluster.average.y * canvas.height, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
+                ctx.arc((cluster.average.x - data.min.x) / (data.max.x - data.min.x) * canvas.width, (cluster.average.y - data.min.y) / (data.max.y- data.min.y) * canvas.height, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
                 ctx.fill(); // Close the path and fill.
             }
         }
 
         function create_points() {
             for (let point of Object.values(data)){
-                x_dot = point.x * canvas.width;
-                y_dot = point.y * canvas.height;
+                x_dot = (point.x - data.min.x) / (data.max.x - data.min.x) * canvas.width
+                y_dot = (point.y - data.min.y) / (data.max.y- data.min.y) * canvas.height
                 drawStarDust(ctx, x_dot,y_dot);
             }
         }
@@ -106,7 +106,7 @@
 
             for(let key in data) {
                 let point = data[key]
-                if(ctx.isPointInPath(point.x * canvas.width, point.y * canvas.height)) {
+                if(ctx.isPointInPath((point.x - data.min.x) / (data.max.x - data.min.x) * canvas.width, (point.y - data.min.y) / (data.max.y- data.min.y) * canvas.height)) {
                     let clusterPoint = {}
                     clusterPoint[key] = point
                     cluster.points.push(clusterPoint)
