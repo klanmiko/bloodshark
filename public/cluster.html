@@ -338,6 +338,22 @@
                     points: points
                 }))
             }
+            
+            number = getQueryVariable("plot");
+            milky = database.ref("systems/milky/jupiter");
+            if (number== 0){
+                milky = database.ref("systems/milky/earth");
+                
+            }
+            else if(number == 1){milky = database.ref("systems/milky/jupiter");}
+            else if(number == 2){milky = database.ref("systems/milky/saturn");}
+            else if(number == 3){milky = database.ref("systems/milky/uranus");}
+            else if(number == 4){milky = database.ref("systems/milky/neptune");}
+                
+            milky.set({
+                    color : "#1976D2"
+                });
+            
             Promise.all(promises).then(() => window.location.href = "/starview.html");
         }
     </script>
