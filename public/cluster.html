@@ -31,7 +31,8 @@
         
         function create_points(){
             let points = Object.values(data)
-            for (let point of points){
+            for (let i = 0; i < Math.min(points.length, 100); i++){
+                let point = points[i]
                 x_dot = point.x * canvas.width;
                 y_dot = point.y * canvas.height;
                 drawStarDust(ctx, x_dot,y_dot);
@@ -196,8 +197,8 @@
                 let game0 = database.ref("plots/0");
                 game0.once('value').then(snapshot => {
                     data = snapshot.val()
-                    //console.log(data)
                     
+                    create_points()
                 });
 
             } catch (e) {
