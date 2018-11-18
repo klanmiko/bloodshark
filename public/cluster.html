@@ -352,9 +352,11 @@
             else if(number == 2){milky = database.ref("systems/milky/saturn");}
             else if(number == 3){milky = database.ref("systems/milky/uranus");}
             else if(number == 4){milky = database.ref("systems/milky/neptune");}
+
+            let oColors = ["#82b92c", "red", "white", "#1976D2"]
                 
             milky.set({
-                    color : "#1976D2"
+                    color : oColors[Math.floor(Math.random() * oColors.length)]
                 });
             
             Promise.all(promises).then(() => window.location.href = "/starview.html");
