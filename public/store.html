@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Firebase Hosting</title>
+
+    <link rel="stylesheet" href="assets/css/normalize.css" />
+    <link rel="stylesheet" href="assets/css/skeleton.css" />
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/5.5.8/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/5.5.8/firebase-auth.js"></script>
+    <script defer src="/__/firebase/5.5.8/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+  </head>
+  <body>
+    <h1>Upload a research csv file</h1>
+    <label>
+      <input id="file" type="file" accept=".csv"/>
+      <span class="label-body"></span>
+    </label>
+
+    <input type="button" onclick="upload()" value="Upload" />
+    <script>
+      function upload() {
+          let fileInput = document.getElementById("file")
+          let theFile = fileInput.files[0]
+          let storage = firebase.storage()
+          let storageRef = storage.ref()
+          let newCSVRef = storageRef.child(theFile.name)
+          newCSVRef.put(theFile).then(function(snapshot){
+            window.location.href = "/storesuccess.html"
+          }, function(error){
+            console.error(error)
+          })
+      }
+    </script>
+  </body>
+</html>
