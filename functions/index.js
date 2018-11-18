@@ -58,35 +58,8 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
       });
   
       parser.on('end', () => {
-        console.log("end loop")
-        let promises = []
-        for(let gameId of games) {
-          game = plots.child(gameId)
-          promises.push(game.once("value").then((support) => {
-            let data = support.val()
-            let points = []
-
-            for(let key in data.points) {
-              points.push(data[key])
-            }
-
-            let max = {}
-            let min = {}
-            let XS = points.map(value => value.x)
-            let YS = points.map(value => value.y)
-            max.x = XS.reduce((a, b) => Math.max(a,b))
-            max.y = YS.reduce((a, b) => Math.max(a,b))
-            min.x = XS.reduce((a, b) => Math.min(a,b))
-            min.y = YS.reduce((a, b) => Math.min(a,b))
-  
-            console.log(min)
-            console.log(max)
-
-            return new Promise.all([game.child("min").set(min).then(() => console.log("min set")), game.child("max").set(max).then(() => console.log("max set"))])
-          }))
-        }
         fs.unlinkSync(tempFilePath)
-        return new Promise.all(promises).then(() => resolve(true));
+        resolve(true);
       });
   
       stream.pipe(parser)

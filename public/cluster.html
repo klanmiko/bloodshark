@@ -232,6 +232,20 @@
                 game0.once('value').then(snapshot => {
                     data = snapshot.val()
                     console.log(data)
+                    game = plots.child(gameId)
+
+                    let max = {}
+                    let min = {}
+                    let XS = data.points.map(value => value.x)
+                    let YS = data.points.map(value => value.y)
+                    max.x = XS.reduce((a, b) => Math.max(a,b))
+                    max.y = YS.reduce((a, b) => Math.max(a,b))
+                    min.x = XS.reduce((a, b) => Math.min(a,b))
+                    min.y = YS.reduce((a, b) => Math.min(a,b))
+        
+                    data.min = min
+                    data.max = max
+
                     create_points()
                 });
 
