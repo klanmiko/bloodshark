@@ -1,0 +1,42 @@
+<html>
+<head>
+    <link rel="stylesheet" href="galaxyview.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+    .dot {
+      height: 30px;
+      width: 30px;
+      background-color: white;
+      border-radius: 50%;
+      display: inline-block;
+      position: absolute;
+    }
+    </style>
+    <script>
+        $(document).ready(function(){ 
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'galaxy.json', true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    var resp = JSON.parse(xhr.responseText);
+                    arr = []
+                    for (var key in resp){
+                        x = resp[key]["x"] * (window.innerWidth)/ 100;
+                        y = resp[key]["y"] * (window.innerHeight)/100;
+                        color = resp[key]["color"];
+                        var span = $('<span />').addClass('dot').css("top",y).css("left",x).css("background-color",color);
+                        arr.push(span)
+                        
+                    }
+                    $('body').html(arr);
+                }
+            }
+            xhr.send(null);
+            
+        });
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

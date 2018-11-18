@@ -1,0 +1,42 @@
+{
+  "sirius":{
+    "x": 50,
+    "y": 100,
+    "color": "red"
+  },
+  "sun":{
+    "x": 30,
+    "y": 30,
+    "color": "#1976D2"
+  },
+  "betelgeuse":{
+    "x": 10,
+    "y": 80,
+    "color": "#1976D2"
+  },
+  "polar":{
+    "x": 80,
+    "y": 20,
+    "color": "red"
+  },
+  "pulsar":{
+    "x": 15,
+    "y": 34,
+    "color": "#82b92c"
+  },
+  "tatooine":{
+    "x": 60,
+    "y": 30,
+    "color": "#82b92c"
+  },
+  "coruscant":{
+    "x": 75,
+    "y": 50,
+    "color": "red"
+  },
+  "davooine":{
+    "x": 20,
+    "y": 60,
+    "color": "white"
+  }
+}
