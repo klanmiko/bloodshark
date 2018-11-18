@@ -1,5 +1,6 @@
 <html>
 <head>
+    <link rel="stylesheet" href="cluster.css">
 <title>Sketchpad</title>
     <script type="text/javascript">
         // Variables for referencing the canvas and 2dcanvas context
@@ -15,6 +16,43 @@
         // We set it to -1 at the start to indicate that we don't have a good value for it yet
         var lastX,lastY=-1;
 
+        
+        function drawStarDust(ctx, x,y){
+            var pointSize = 3; // Change according to the size of the point.
+
+            ctx.fillStyle = "white"; // Red color
+
+            ctx.beginPath(); //Start path
+            ctx.arc(x, y, pointSize, 0, Math.PI * 2, true); // Draw a point using the arc function of the canvas with a point structure.
+            ctx.fill(); // Close the path and fill.
+        }
+        
+        var data = {}
+        
+        function create_points(){
+            document.addEventListener('DOMContentLoaded', function() {
+               try{
+                   let app = firebase.app();
+                   let database = app.database();
+                   let game0 = database.ref("plots/0");
+                   game0.once('value').then(snapshot => {
+                       data = snapshot.val()
+                       //console.log(data)
+                       for (i = 0; i < 100; i++){
+                           x_dot = Object.values(data)[i].x * canvas.width;
+                           y_dot = Object.values(data)[i].y * canvas.height;
+                           drawStarDust(ctx, x_dot,y_dot);
+                       }
+                   });
+
+               } catch (e) {
+                   console.error(e);
+               }
+            });
+        }
+        
+        create_points();
+        
         // Draws a line between the specified position on the supplied canvas name
         // Parameters are: A canvas context, the x position, the y position, the size of the dot
         function drawLine(ctx,x,y,size) {
@@ -25,11 +63,8 @@
             lastY=y;
             }
 
-            // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
-            r=0; g=0; b=0; a=255;
-
             // Select a fill style
-            ctx.strokeStyle = "rgba("+r+","+g+","+b+","+(a/255)+")";
+            ctx.strokeStyle = "#1976D2";
 
             // Set the line "cap" style to round, so lines at different angles can join into each other
             ctx.lineCap = "round";
@@ -59,12 +94,13 @@
         // Clear the canvas context using the canvas width and height
         function clearCanvas(canvas,ctx) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            create_points();
         }
 
         // Keep track of the mouse button being pressed and draw a dot at current location
         function sketchpad_mouseDown() {
             mouseDown=1;
-            drawLine(ctx,mouseX,mouseY,12);
+            drawLine(ctx,mouseX,mouseY,5);
         }
 
         // Keep track of the mouse button being released
@@ -83,7 +119,7 @@
 
             // Draw a dot if the mouse button is currently being pressed
             if (mouseDown==1) {
-                drawLine(ctx,mouseX,mouseY,12);
+                drawLine(ctx,mouseX,mouseY,5);
             }
         }
 
