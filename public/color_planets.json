@@ -1,20 +1,20 @@
 {
-  "jupiterp":{
+  "jupiter":{
     "color": "red"
   },
-  "uranusp":{
+  "uranus":{
     "color": "red"
   },
-  "earthp":{
+  "earth":{
     "color": "#82b92c"
   },
-  "saturnp":{
+  "saturn":{
     "color": "#82b92c"
   },
-  "neptunep":{
+  "neptune":{
     "color": "#1976D2"
   },
-  "sunp":{
+  "sun":{
     "color": "white"
   }
 }

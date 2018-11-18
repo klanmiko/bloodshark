@@ -116,15 +116,21 @@
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4) {
                     var resp = JSON.parse(xhr.responseText);
+                    $("#jupiterp").css("border-color", resp.jupiter.color);
+                    $("#saturnp").css("border-color", resp.saturn.color);
+                    $("#sun").css("border-color", resp.sun.color);
+                    $("#earthp").css("border-color", resp.earth.color);
+                    $("#uranusp").css("border-color", resp.uranus.color);
+                    $("#neptunep").css("border-color", resp.neptune.color);
                 }
             }
             xhr.send(null);
-            $("#neptunep").css("border", "2px solid yellow");
-            $("#saturnp").css("border", "2px solid yellow");
-            $("#jupiterp").css("border", "3px solid yellow");
-            $("#uranusp").css("border", "2px solid yellow");
-            $("#earthp").css("border", "2px solid yellow");
-            $("#sun").css("border", "4px solid #1976D2");
+            $("#neptunep").css("border", "2px solid");
+            $("#saturnp").css("border", "2px solid");
+            $("#jupiterp").css("border", "3px solid");
+            $("#uranusp").css("border", "2px solid");
+            $("#earthp").css("border", "2px solid");
+            $("#sun").css("border", "4px solid");
         });
     </script>
     <script src="js/prefixfree.min.js"></script>
