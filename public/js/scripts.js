@@ -1,3 +1,4 @@
+/*global $, jQuery, alert*/
 $(window).load(function(){
 
   var body = $("body"),

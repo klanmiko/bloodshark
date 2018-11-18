@@ -70,6 +70,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   transform-style: preserve-3d;
+  cursor: pointer;
   animation-name: orbit;
   animation-iteration-count: infinite;
   animation-timing-function: linear; }
