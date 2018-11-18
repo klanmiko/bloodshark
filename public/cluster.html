@@ -113,7 +113,7 @@
                     delete data.points[key]
                 }
             }
-
+            
             let average = {x: 0, y: 0}
 
             for(let pointObject of cluster.points) {
@@ -213,6 +213,20 @@
             return null;
         }
 
+        function reset() {
+            for(let cluster of clusters) {
+                for(let point of cluster.points) {
+                    let key = Object.keys(point)[0]
+                    console.log(point)
+                    data.points[key] = point[key] 
+                }
+                cluster.points.length = 0
+            }
+
+            clusters.length = 0
+            
+        }
+
         // Set-up the canvas and add our event handlers after the page has loaded
         function init() {
             // Get the specific canvas element from the HTML document
@@ -306,7 +320,7 @@
 <body onload="init()">
     <div id="sketchpadapp">
         <div class="leftside">
-            <button id="clearbutton" onclick="clearCanvas(canvas,ctx);">Reset</button>
+            <button id="clearbutton" onclick="reset()">Reset</button>
             <button id="donebutton" onclick="submitData()">Done</button>
         </div>
         <div class="rightside">
