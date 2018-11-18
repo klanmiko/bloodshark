@@ -70,11 +70,8 @@
           let app = firebase.app();
           let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
           document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
-          var provider = new firebase.auth.FacebookAuthProvider();
 
-          provider.setCustomParameters({
-            'display': 'popup'
-          });
+          var provider = new firebase.auth.GithubAuthProvider();
 
           firebase.auth().signInWithPopup(provider).then(function(result) {
             // This gives you a Facebook Access Token. You can use it to access the Facebook API.
