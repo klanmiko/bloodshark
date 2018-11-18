@@ -82,7 +82,7 @@ exports.loadPlot = functions.storage.object().onFinalize((object) => {
             console.log(min)
             console.log(max)
 
-            return new Promise.all([game.child("min").set(min), game.child("max").set(max)])
+            return new Promise.all([game.child("min").set(min).then(() => console.log("min set")), game.child("max").set(max).then(() => console.log("max set"))])
           }))
         }
         fs.unlinkSync(tempFilePath)
