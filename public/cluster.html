@@ -248,9 +248,9 @@
             try {
                 let app = firebase.app();
                 let database = app.database();
-                let game0 = database.ref("posts/0")
+                let game0 = database.ref("plots/0")
                 game0.once('value').then(snapshot => {
-                    console.log(snapshot)
+                    console.log(snapshot.val())
                 });
             } catch (e) {
                 console.error(e);
